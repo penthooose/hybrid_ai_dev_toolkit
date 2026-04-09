@@ -1,4 +1,4 @@
-# Framework Toolkit
+# AI Applications Development Toolkit
 
 A toolkit for preparing data, extracting information, and fine-tuning subsymbolic AI models for integration into hybrid AI applications. Contains both general-purpose tools and application-specific implementations.
 
