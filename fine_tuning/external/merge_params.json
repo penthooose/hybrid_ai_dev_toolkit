@@ -1,0 +1,67 @@
+{
+  "1": {
+    "base_model_path": "<BASE_MODEL_DIR>/Llama3-DiscoLeo-Instruct-8B-v0.1",
+    "adapter_path": "<ADAPTERS_DIR>/checkpoints_llama3_german_unsupervised_1/final_model",
+    "output_path": "<MERGED_MODELS_DIR>/llama3_german_merged_unsupervised_1",
+    "use_fp16": true
+  },
+  "2": {
+    "base_model_path": "<MERGED_MODELS_DIR>/llama3_german_merged_unsupervised_1",
+    "adapter_path": "<ADAPTERS_DIR>/checkpoints_llama3_german_unsupervised_2/final_model",
+    "output_path": "<MERGED_MODELS_DIR>/llama3_german_merged_unsupervised_2",
+    "use_fp16": true
+  },
+  "3": {
+    "base_model_path": "<MERGED_MODELS_DIR>/llama3_german_merged_unsupervised_2",
+    "adapter_path": "<ADAPTERS_DIR>/checkpoints_llama3_german_unsupervised_3/final_model",
+    "output_path": "<MERGED_MODELS_DIR>/llama3_german_merged_unsupervised_3",
+    "use_fp16": true
+  },
+  "5": {
+    "base_model_path": "<MERGED_MODELS_DIR>/llama3_german_merged_unsupervised_3",
+    "adapter_path": "<ADAPTERS_DIR>/checkpoints_llama3_german_supervised_5/final_model",
+    "output_path": "<MERGED_MODELS_DIR>/llama3_german_merged_supervised_5",
+    "use_fp16": true
+  },
+  "6": {
+    "base_model_path": "<BASE_MODEL_DIR>/Llama3-DiscoLeo-Instruct-8B-v0.1",
+    "adapter_path": "<ADAPTERS_DIR>/checkpoints_llama3_german_supervised_V2_1/final_model",
+    "output_path": "<MERGED_MODELS_DIR>/llama3_german_merged_supervised_V2_1",
+    "use_fp16": true
+  },
+  "7": {
+    "base_model_path": "<MERGED_MODELS_DIR>/llama3_german_merged_supervised_V2_1",
+    "adapter_path": "<ADAPTERS_DIR>/checkpoints_llama3_german_supervised_V2_2/final_model",
+    "output_path": "<MERGED_MODELS_DIR>/llama3_german_merged_supervised_V2_2",
+    "use_fp16": true
+  },
+  "8": {
+    "base_model_path": "<BASE_MODEL_DIR>/Llama3-DiscoLeo-Instruct-8B-v0.1",
+    "adapter_path": "<ADAPTERS_DIR>/checkpoints_llama3_german_unsupervised_V1_1/final_model",
+    "output_path": "<MERGED_MODELS_DIR>/llama3_german_merged_unsupervised_V1_1",
+    "use_fp16": true
+  },
+  "9": {
+    "base_model_path": "<MERGED_MODELS_DIR>/llama3_german_merged_unsupervised_V1_1",
+    "adapter_path": "<ADAPTERS_DIR>/checkpoints_llama3_german_supervised_V1_2/final_model",
+    "output_path": "<MERGED_MODELS_DIR>/llama3_german_merged_supervised_V1_2",
+    "use_fp16": true
+  },
+  "10": {
+    "yaml_config_path": "./external/merge_models_params.yaml",
+    "output_dir": "<MERGED_MODELS_DIR>/llama3_german_merged_V3",
+    "cpu_offload": true
+  },
+  "11": {
+    "base_model_path": "<MERGED_MODELS_DIR>/llama3_german_merged_V3",
+    "adapter_path": "<ADAPTERS_DIR>/checkpoints_llama3_german_V3_1/final_model",
+    "output_path": "<MERGED_MODELS_DIR>/llama3_german_merged_V3_1",
+    "use_fp16": true
+  },
+  "12": {
+    "base_model_path": "<MERGED_MODELS_DIR>/llama3_german_merged_V3_1",
+    "adapter_path": "<ADAPTERS_DIR>/checkpoints_llama3_german_V3_2/final_model",
+    "output_path": "<MERGED_MODELS_DIR>/llama3_german_merged_V3_2",
+    "use_fp16": true
+  }
+}

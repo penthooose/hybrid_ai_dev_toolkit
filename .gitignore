@@ -1,0 +1,53 @@
+# Build artifacts
+_build/
+__pycache__/
+deps/
+
+# Elixir
+*.beam
+*.plt
+erl_crash.dump
+
+# Python
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+
+# llama.cpp specific
+model_tools/external/llama.cpp/build/
+model_tools/external/llama.cpp/.git/
+model_tools/external/llama.cpp/out/
+model_tools/external/llama.cpp/bin/
+
+# Model files
+*.bin
+*.gguf
+*.ggml
+*.pth
+model_tools/external/llama.cpp/models/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Misc
+.DS_Store
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Log files
+*.log

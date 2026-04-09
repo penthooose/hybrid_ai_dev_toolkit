@@ -1,0 +1,463 @@
+{
+  "system_prompt": "### SYSTEM \n Du bist ein Assistent für die Analyse von Gutachten über Schäden an medizinischen Geräten.",
+
+  "prompt_initial": "Analysiere die einzelnen Kapitel und beantworte dann die folgenden Leitfragen:\n\n1. Welche Angaben hat der Anwender und/oder der Versicherungsnehmer des Medizinprodukts über den Hergang des Schadensereignisses gemacht? (optional)\n2. Welche einzelnen Schäden hat der Sachverständige festgestellt?\n3. Sind mehrere Schäden ohne kausalen Zusammenhang ersichtlich? (optional)\n4. Welche möglichen Schadensursachen nennt der Gutachter für die einzelnen festgestellten Schäden?\n5. Wie hoch schätzt der Gutachter die einzelnen Schäden ein?\n6. Welche Empfehlungen hat der Gutachter ausgesprochen? (optional)\n7. Welche Maßnahmen hat der Versicherungsnehmer und/oder der Anwender ergriffen, um den Schaden zu vermeiden? (optional)\n8. Lässt sich aus unzureichenden Maßnahmen oder der Vernachlässigung einer Versicherungsbedingung eine Obliegenheitsverletzung ableiten? (optional)\n9. Wurden nach dem Schadenereignis geeignete Maßnahmen ergriffen, um eine Ausweitung des Schadens und das Entstehen weiterer Schäden zu verhindern?\n10. Wurden Maßnahmen getroffen, um eine uneingeschränkte Begutachtung des Schadens zu gewährleisten?\n11. Welche Maßnahmen wurden zur Behebung der Schäden empfohlen? (optional)\n\n",
+
+  "prompt_full_report": "Dies ist der vollständige Text des Gutachtens:\n\n<%= @full_report %>",
+
+  "prompt_chapters": "Dies sind die einzelnen Kapitel des Gutachtens:",
+
+  "final_prompt": "Du hast nun alle Teile des Gutachtens erhalten. Bitte beantwore die zu Beginn aufgeführten Leitfragen mithilfe aller genannten Informationen.",
+
+  "prompt_chapter_initial_a": "### ANWEISUNG \n Beantworte die folgenden Fragen ausschließlich anhand des TEXTES. \n Wenn die Antwort nicht aus dem TEXT hervorgeht, schreibe: 'N.A.' \n Gib kurze, stichpunktartige Antworten. \n Die folgenden Fragen gelten für alle BEISPIELE, als auch für den eigentlichen FALL. \n\n ### FRAGEN \n <%= @questions %> \n\n <%= @examples_section %> \n\n ### FALL BEGINN \n\n ### TEXT \n <%= @chapter %> \n\n ### FRAGEN \n <%= @questions %> \n\n ### ANTWORTEN \n",
+  "prompt_chapter_initial_b": "### ANWEISUNG \n Beantworte die folgenden Fragen ausschließlich anhand des TEXTES im Abschnitt **FALL BEGINN**. \n Nutze die enthaltenen BEISPIELE ausschließlich als Vorlage für das Format. \n Falls die Antwort nicht aus dem Text hervorgeht, schreibe: 'N.A.'. \n Gib kurze, stichpunktartige Antworten. \n\n  <%= @examples_section %> \n\n ### FALL BEGINN \n Beantworte die folgenden Fragen **ausschließlich basierend auf dem untenstehenden Textabschnitt**. \n Ignoriere dabei alle vorherigen Beispiele. \n\n ### TEXT \n <%= @chapter %> \n\n ### FRAGEN \n <%= @questions %> \n\n ### ANTWORTEN \n",
+
+  "prompt_compare_text_json_initial": "### ANWEISUNG \n Analysiere ausschließlich **inhaltliche Unterschiede** – unterschiedliche **Darstellungsformen mit gleicher Bedeutung** (z.B. \"--\" und \"unbekannt\") **sind zu ignorieren**. \n Falls bestimmte Informationen **im TEXT vorkommen, aber im JSON fehlen**, zähle diese genau auf. \nWenn keine inhaltlichen Unterschiede festgestellt werden können, schreibe: 'N.A.'. \n ### \n\n <%= @examples_section %> \n\n FALL BEGINN \n Vergleiche nun den folgenden TEXT und JSON. Nutze für die Analyse **keine Inhalte der vorherigen BEISPIELE**. \n\n ### TEXT \n <%= @chapter %> \n\n ### JSON \n <%= @json %> \n\n ### FEHLENDE INHALTE \n",
+  "prompt_summary": "### ANWEISUNG \n Extrahiere die essenziellen Kernaussagen aus dem folgenden TEXT. \n Gib ausschließlich die wichtigsten Informationen **in prägnanten Stichpunkten** wieder. \n Ziel ist eine inhaltlich präzise, knappe Zusammenfassung. Vermeide Nebensächlichkeiten, Wiederholungen und Interpretationen. \n Nutze die folgenden BEISPIELE **nur als Formatvorlage**, nicht als inhaltliche Referenz. \n\n <%= @examples_section %> \n\n ### FALL BEGINN \n Analysiere und fasse nun den folgenden TEXT zusammen. Nutze **keine Inhalte der vorherigen Beispiele** in der Zusammenfassung. \n\n ### TEXT \n <%= @chapter %> \n\n ### ZUSAMMENFASSUNG \n",
+  "prompt_summary_previous_chapters": "### ANWEISUNG \n Fasse die wichtigsten Punkte der folgenden Zusammenfassungen der einzelnen Kapitel des Gutachtens weiter zu einer Gesamtzusammenfassung zusammen. \n Gib ausschließlich die wichtigsten Informationen **in prägnanten Stichpunkten** wieder. \n Ziel ist eine inhaltlich präzise, **knappe Zusammenfassung ohne Redundanz**. \n Vermeide Nebensächlichkeiten, Wiederholungen und Interpretationen. \n Nutze die folgenden BEISPIELE **nur als Formatvorlage**, nicht als inhaltliche Referenz. \n\n <%= @examples_section %> \n\n ### FALL BEGINN \n Analysiere und fasse nun die folgenden Textblöcke zusammen. Nutze **keine Inhalte der vorherigen Beispiele** in der Zusammenfassung. \n\n ### TEXT \n <%= @chapter %> \n\n ### ZUSAMMENFASSUNG \n",
+
+  "examples_section_a": "### BEISPIEL <%= @example_num %> BEGINN \n\n ### TEXT \n <%= @example_text %> \n\n ### ANTWORTEN \n <%= @example_answers %> \n\n ### BEISPIEL <%= @example_num %> ENDE",
+  "examples_section_b": "### BEISPIEL <%= @example_num %> BEGINN \n\n ### TEXT \n <%= @example_text %> \n\n ### FRAGEN \n <%= @questions %> \n\n ### ANTWORTEN \n <%= @example_answers %> \n\n ### BEISPIEL <%= @example_num %> ENDE",
+
+  "examples_compare_text_json": "### BEISPIEL <%= @example_num %> BEGINN \n\n ### TEXT \n <%= @example_text %> \n\n ### JSON \n <%= @example_json %> \n\n ### FEHLENDE INHALTE \n <%= @example_missing %> \n\n ### BEISPIEL <%= @example_num %> ENDE",
+  "examples_summary": "### BEISPIEL <%= @example_num %> BEGINN \n\n ### TEXT \n <%= @example_text %> \n\n ### ZUSAMMENFASSUNG \n <%= @example_summary %> \n\n ### BEISPIEL <%= @example_num %> ENDE",
+
+  "prompt_chapter_elements": {
+    "Technische_Daten": {
+      "examples": [
+        {
+          "example_text_1": "Kapitel 2: Technische Gerätedaten \nProduktart : Flexibles Endoskop\nProdukttyp : EG-530WR\nHersteller : Fujifilm\nSerie Nr. : 3G290B008\nBaujahr : 2009\nAnschaffungsdatum : 04.2009\nAnschaffungspreis : unbekannt",
+          "example_json_1": "{\n  \"Anschaffungsdatum\": \"04.2009\",\n  \"Anschaffungspreis\": \"unbekannt\",\n  \"Anschrift\": \"[REDACTED_ADDRESS]\",\n  \"Auftraggeber\": \"[REDACTED_ORG]\",\n  \"Auftragsdatum\": \"[REDACTED_DATE]\",\n  \"Baujahr\": \"2009\",\n  \"Datum_GA_Erstellung\": \"[REDACTED_DATE]\",\n  \"GA_Nr\": \"[REDACTED_ID]\",\n  \"GA_Typ\": \"Gutachten\",\n  \"Hersteller\": \"Fujifilm\",\n  \"Produktart\": \"Flexibles Endoskop\",\n  \"Produkttyp\": \"EG-530WR\",\n  \"Sachverständiger\": \"[REDACTED_EXPERT]\",\n  \"Sachverständiger_Titel\": \"[REDACTED_TITLE]\",\n  \"Schadennummer\": \"[REDACTED_ID]\",\n  \"Schadenobjekt\": \"Flexibles Endoskop (Video-Gastroskop)\",\n  \"Serie_Nr\": \"3G290B008\",\n  \"Versicherungsnehmer\": \"[REDACTED_ORG]\",\n  \"Versicherungsnehmer_Adresse\": \"[REDACTED_ADDRESS]\",\n  \"Versicherungsscheinnummer\": \"[REDACTED_ID]\"\n}",
+          "example_missing_1": "N.A."
+        },
+        {
+          "example_text_2": "Kapitel 2: Technische Gerätedaten \nProduktart : Flexibles Video-Duodenoskop\nProdukttyp : ED-450XT8\nHersteller : Fujinon\nSerie Nr. : MD103A008\nBaujahr : 2010\nAnschaffungsdatum : Juni 2010\nAnschaffungspreis : --\nNeupreis : 26.775,00 € brutto",
+          "example_json_2": "{\n  \"Anschaffungsdatum\": \"Juni 2010\",\n  \"Anschaffungspreis\": \"unbekannt\",\n  \"Anschrift\": \"[REDACTED_ADDRESS]\",\n  \"Auftraggeber\": \"[REDACTED_ORG]\",\n  \"Auftragsdatum\": \"[REDACTED_DATE]\",\n  \"Baujahr\": \"2010\",\n  \"Datum_GA_Erstellung\": \"[REDACTED_DATE]\",\n  \"GA_Nr\": \"[REDACTED_ID]\",\n  \"GA_Typ\": \"Gutachten\",\n  \"Hersteller\": \"Fujinon\",\n  \"Neupreis\": \"26.775,00 € brutto\",\n  \"Produktart\": \"Flexibles Video-Duodenoskop\",\n  \"Sachverständiger\": \"[REDACTED_EXPERT]\",\n  \"Sachverständiger_Titel\": \"[REDACTED_TITLE]\",\n  \"Schadennummer\": \"[REDACTED_ID]\",\n  \"Schadenobjekt\": \"Flexibles Endoskop (Duodenoskop)\",\n  \"Schadentag\": \"Oktober 2012\",\n  \"Serie_Nr\": \"MD103A008\",\n  \"Versicherungsnehmer\": \"[REDACTED_ORG]\",\n  \"Versicherungsnehmer_Adresse\": \"[REDACTED_ADDRESS]\",\n  \"Versicherungsscheinnummer\": \"[REDACTED_ID]\"\n}",
+          "example_missing_2": "Produkttyp: ED-450XT8"
+        }
+      ]
+    },
+    "Umfang": {
+      "questions": [
+        "A. Welche konkrete Aufgabe oder Untersuchung soll durchgeführt werden?",
+        "B. In welchem Kontext oder für welchen Fachbereich findet das Vorhaben statt?",
+        "C. Welche rechtlichen, normativen oder fachlichen Standards sind für das Vorhaben relevant?"
+      ],
+      "examples": [
+        {
+          "example_text_1": "Kapitel 1: Vorwort \n Das vorliegende Gutachten dient der Untersuchung, inwiefern die erforderlichen Maßnahmen zur Erfüllung der Trinkwasserverordnung -- TrinkwV sowie der Empfehlung des Robert Koch-Institutes bzgl. der Anforderungen an die Hygiene zur Infektionsprävention in der Zahnheilkunde erfüllt sind.",
+          "example_answers_1": [
+            "A. Überprüfung der Einhaltung von Hygienemaßnahmen zur Infektionsprävention",
+            "B. Zahnheilkunde",
+            "C. Trinkwasserverordnung (TrinkwV); \n Empfehlungen des Robert Koch-Institutes zur Hygiene in der Zahnheilkunde"
+          ]
+        },
+        {
+          "example_text_2": "Kapitel 1: Vorwort / Vorgang \n In der oben genannten Schadensache wurde mit Datum vom 01.04.2022 ein Gutachten zur Schadenermittlung eines Überspannungsschadens erstattet (vgl. GA 22/027).\nZwischenzeitlich wurden durch den Versicherungsnehmer weitere Serviceberichte und Reparaturrechnungen mit der Bitte eingereicht, einen evtl. Zusammenhang mit dem Schaden durch Überspannung zu prüfen.",
+          "example_answers_2": [
+            "A. Prüfung eines möglichen Zusammenhangs zwischen weiteren Serviceberichten und Reparaturrechnungen, und einem bereits begutachteten Überspannungsschaden",
+            "B. Versicherungswesen",
+            "C. N.A."
+          ]
+        }
+      ],
+      "summary": [
+        {
+          "example_text_1": "Kapitel 1: Vorwort \nGemäß Auftrag des [REDACTED_ORG] vom [REDACTED_DATE], ist zu dem nachfolgend näher beschriebenen Videokoloskop ein Schadengutachten zu erstatten. Der beauftragte Gutachtenumfang entspricht nachfolgender Gliederung:\n- beschädigtes Objekt mit technischen Daten\n- Schadenursache/-auswirkungen\n- beschädigte Teile\n- Reparaturmöglichkeiten/-kosten\n- Neu- und Zeitwert des Objektes\n- verschleißbedingte Abzüge\n- Anzahl separater Akutschäden\n- ggf. vorliegende Obliegenheitsverletzungen.\nHinweis:\nDurch das vorliegende Gutachten wird die Leistungspflicht des Versicherers weder dem Grunde, noch der Höhe nach anerkannt.\n",
+          "example_summary_1": "[REDACTED_ORG] beauftragte ein Schadengutachten; \nBetroffenes Objekt: Videokoloskop; \nGutachtenumfang umfasst: Objektbeschreibung mit technischen Daten, Schadenursache und -auswirkungen, Beschädigte Komponenten, Reparaturoptionen und -kosten, Neu- und Zeitwertermittlung, Verschleißbedingte Abzüge, Anzahl separater Akutschäden, Mögliche Obliegenheitsverletzungen; \nGutachten impliziert keine Anerkennung der Leistungspflicht des Versicherers"
+        },
+        {
+          "example_text_2": "Kapitel 1: Vorwort/Vorgang \nZur Regulierung des vorliegenden Schadens, an einem Ultraschalldiagnostikgerät der tierärztlichen Praxis [REDACTED_ORG], soll im Auftrag des [REDACTED_ORG] der Zeitwert des betroffenen Gerätes ermittelt werden.",
+          "example_summary_2": "Schadensregulierung für ein beschädigtes Ultraschalldiagnostikgerät; \nGerät gehört zu [REDACTED_ORG]; \n[REDACTED_ORG] beauftragte die Ermittlung; \nZiel ist die Zeitwertbestimmung des Gerätes"
+        }
+      ]
+    },
+    "Aufgaben_und_Fragestellungen": {
+      "questions": [
+        "A. Welche Fragen werden gestellt bzw. welche Aufgaben gilt es zu bearbeiten?",
+        "B. Wer stellt die Fragen?"
+      ],
+      "examples": [
+        {
+          "example_text_1": "Kapitel 3: Ergänzungsfragen der Antragsgegnerin (gemäß Schriftsatz) \nFrage 1. Wie ist es technisch möglich, dass bei dem Prozess der Pulverbeschichtung einzelne Flächen eines Teiles fehlerhaft beschichtet sein sollen und andere Flächen an dem gleichen Teil nicht. Kann eine Vernetzung des Materials ungleichmäßig erfolgen?\nFrage 2. Warum ist unter der Berücksichtigung der Frage 1. ein systematischer Fehler im Prozess bzw. in der Anwendungsform, d.h. zu nasse Jumbo/Maxi Wipes, ausgeschlossen?\nFrage 3. Warum soll die Aufnahme für den Fixierstift der Gelenkabdeckung an einem Arm durch eine fehlerhafte Beschichtung entstanden sein und nicht durch ein fehlerhaftes, verkantetes Aufstecken der Abdeckung?",
+          "example_answers_1": [
+            "A. Gestellte Fragen: \nFrage 1: Technische Möglichkeit ungleichmäßiger Pulverbeschichtung; \nFrage 2: Ausschluss systematischer Fehler bei zu nassen Jumbo/Maxi Wipes; \nFrage 3: Ursache der Aufnahme für Fixierstift (Beschichtungsfehler vs. verkantetes Aufstecken)",
+            "B. Die Antragsgegnerin (gemäß Schriftsatz)"
+          ]
+        },
+        {
+          "example_text_2": "Kapitel 2: Aufgabenstellung \nDie zuständige Behörde bittet um Klärung folgender Fragen:\n1. Um was für einen Schaden an dem Dental-Laser 'Lite Touch' handelt es sich? Wie wirkt er sich auf die Funktionsfähigkeit aus? (Genaue Schadensbeschreibung),\n2. Soweit anhand des Schadenbildes rekonstruierbar: Wodurch wurde der Schaden verursacht?\n3. Kann das Gerät repariert werden? Welche Kosten würden hierfür anfallen?\n4. Wie hoch ist der Zeitwert des Gerätes anzusetzen? Dabei wird zu berücksichtigen sein, dass eine messtechnische Untersuchung ergeben hat, dass die untersuchten Dental-Laser 'Lite-Touch' die in der Europäischen Norm (EN) 55011:2009 vorgegebenen Störfeldstärkegrenzwerte und zum Teil auch den Grenzwerten der Störspannung nicht einhalten. Die Dental-Laser entsprechen daher nicht der Richtlinie 93/42/EWG über Medizinprodukte und dürfen im Europäischen Wirtschaftsraum weder vertrieben noch betrieben werden.",
+          "example_answers_2": [
+            "A. Gestellte Fragen: \nFrage 1: Art des Schadens am Dental-Laser 'Lite Touch' und Auswirkungen auf Funktionsfähigkeit; \nFrage 2: Rekonstruktion der Schadensursache; \nFrage 3: Reparaturmöglichkeit und anfallende Kosten; \nFrage 4: Bestimmung des Zeitwerts des Gerätes (unter Berücksichtigung der messtechnischen Befunde)",
+            "B. [REDACTED_AUTHORITY]"
+          ]
+        }
+      ],
+      "summary": [
+        {
+          "example_text_1": "Kapitel 2: Aufgabenstellung \nDie zuständige Behörde stellt vier Fragen; \nErforderliche Klärung: Schadensbeschreibung, Schadensursache, Reparaturmöglichkeiten/-kosten, Zeitwert; \nMesstechnische Untersuchung ergab: Geräte halten Grenzwerte nach EN 55011:2009 nicht ein; \nDental-Laser entsprechen nicht der Richtlinie 93/42/EWG über Medizinprodukte; \nVertrieb und Betrieb im Europäischen Wirtschaftsraum unzulässig",
+          "example_summary_1": "Behörde stellt Fragen zum Dental-Laser; \nGeforderte Klärung: Schadensbeschreibung, Schadensursache, Reparaturmöglichkeiten/-kosten, Zeitwert; \nMesstechnische Befunde zeigen Nichteinhaltung relevanter Normen"
+        }
+      ]
+    },
+    "Schadenursache_Angaben": {
+      "questions": [
+        "A. Wann und wie wurde der Schaden festgestellt?",
+        "B. Welche Angaben hat der Anwender oder der Versicherungsnehmer über den Hergang des Schadensereignisses gemacht?"
+      ],
+      "examples": [
+        {
+          "example_text_1": "Kapitel 3: Vorgang \nZu dem nachfolgend näher untersuchten Schaden an einem Video-Koloskop liegen keine näheren Angaben zur Schadensursache bzw. zum Schadenhergang vor. Der Schadenmeldung des Versicherungsnehmers zufolge, wurden die Schäden am Einführungsschlauch erst im Rahmen der Geräteaufbereitung festgestellt.\nEin Herstellerbericht wurde erstellt.",
+          "example_answers_1": [
+            "A. Schadenfeststellung erst im Rahmen der Geräteaufbereitung; genaues Datum wurde nicht genannt",
+            "B. N.A."
+          ]
+        },
+        {
+          "example_text_2": "Kapitel 1: Vorwort / Vorgang \nGemäß Auftrag des [REDACTED_ORG] ist zu dem unten näher beschriebenen Autorefraktometer der Zeitwert zum Schadenzeitpunkt zu ermitteln.\nAls die Versicherungsnehmerin nach der Untersuchung vom Untersuchungsstuhl aufstehen wollte, verlor sie das Gleichgewicht und fiel nach hinten. Beim Versuch, sich an einem Sehschärfenmessgerät (Refraktometer) festzuhalten, fiel dieses um. Das Gerät erlitt dabei einen erheblichen Schaden.",
+          "example_answers_2": [
+            "A. Schadenfeststellung zum Zeitpunkt des Unfalls; genaue Uhrzeit wurde nicht genannt",
+            "B. Versicherungsnehmerin verlor nach Untersuchung beim Aufstehen das Gleichgewicht, versuchte sich am Refraktometer festzuhalten, Gerät fiel um und erlitt erheblichen Schaden"
+          ]
+        }
+      ],
+      "summary": [
+        {
+          "example_text_1": "Vordefinierte Schadenmeldung: Wasseraustritt wurde unmittelbar nach einer Patientenuntersuchung festgestellt; \nSchaden wurde an Hersteller/Wartung gemeldet; \nTechnische Untersuchungen und kurzfristige Instandsetzung veranlasst.",
+          "example_summary_1": "Schadenmeldung durch Versicherungsnehmer; \nWasseraustritt festgestellt; \nSofortige Meldung an Hersteller/Wartungsdienst; \nTechnische Untersuchungen und kurzfristige Instandsetzung durchgeführt"
+        }
+      ]
+    },
+
+    "Systembeschreibung": {
+      "questions": [
+        "A. Was ist die grundlegende Funktionsweise des Geräts?",
+        "B. Für welche Patientengruppe ist das Gerät konzipiert?",
+        "C. Aus welchen wesentlichen Komponenten besteht das System?",
+        "D. Wie erfolgt die Bedienung des Systems?"
+      ],
+      "examples": [
+        {
+          "example_text_1": "Kapitel 4: Systembeschreibung \nBei dem vorgenannten Gerät handelt es sich um ein Beatmungsgerät, das sowohl für beatmungsunabhängige, als auch für beatmungsabhängige Patienten zum Einsatz kommt. ...",
+          "example_answers_1": [
+            "A. Beatmungsgerät mit kontrollierten und assistierten Beatmungsformen; ...",
+            "B. Für beatmungsunabhängige und beatmungsabhängige Patienten; ...",
+            "C. Berührungssensitiver Bildschirm zur Bedienung; ...",
+            "D. Bedienung über berührungssensitiven Bildschirm (Touchbildschirm); ..."
+          ]
+        },
+        {
+          "example_text_2": "Kapitel 3: Systembeschreibung \nBei dem vorgenannten Gerät handelt es sich um eine tragbare Insulinpumpe ...",
+          "example_answers_2": [
+            "A. Tragbare Insulinpumpe zur kontinuierlichen Insulinabgabe; ...",
+            "B. N.A.",
+            "C. Tragbare Pumpe mit Halteclip zur Befestigung an Kleidung; ...",
+            "D. Parameter wie Basalrate und Bolusvolumen sind programmiert; ..."
+          ]
+        }
+      ],
+      "summary": [
+        {
+          "example_text_1": "Kapitel 4: Systembeschreibung \nZusammenfassung der Systemfunktionalität und Bedienkonzepte.",
+          "example_summary_1": "Beatmungsgerät: Grundfunktionen, Beatmungsarten, Bedienung über Touchbildschirm, zwei Bedienoberflächen."
+        }
+      ]
+    },
+
+    "Begutachtung": {
+      "questions": [
+        "A. Welche Schäden wurden festgestellt?",
+        "B. Welche möglichen Schadensursachen kommen in Frage für die Schäden?",
+        "C. Wann und wie ist der Schaden eingetreten?",
+        "D. Welche versicherungsrelevanten Feststellungen wurden getroffen?",
+        "E. Wie hoch werden die Einzelschäden eingeschätzt?",
+        "F. Wie hoch wird der Gesamtschaden eingeschätzt?"
+      ],
+      "examples": [
+        {
+          "example_text_1": "Kapitel 3: Feststellung zur Schadenursache \nIm Rahmen eines Ortstermines wurden die Schäden an den Behandlungseinheiten begutachtet.\nSowohl am Chassis, als auch auf den Platinen, den Elektro- und Wasserleitungen sowie im Fußbodenbereich, sind getrocknete Feuchtigkeitsrückstände zu erkennen. ...",
+          "example_answers_1": [
+            "A. Getrocknete Feuchtigkeitsrückstände am Chassis, Platinen, Elektro- und Wasserleitungen und im Fußbodenbereich; ...",
+            "B. Wasserschaden/Feuchtigkeit",
+            "C. N.A.",
+            "D. Ortstermin zur Begutachtung (Datum redacted)",
+            "E. N.A.",
+            "F. N.A."
+          ]
+        },
+        {
+          "example_text_2": "Kapitel 3: Sachverständige Untersuchungen \nDie Schadenbewertung beruht auf der tabellarischen Aufstellung aller entwendeten Geräte, wie sie vom Versicherungsnehmer auch der örtlich zuständigen Polizeidienststelle zur Verfügung gestellt wurde (Tab. 1).\n*[Eigentumsnachweis:]*\nDer Eigentumsnachweis wurde durch Vorlage der entsprechenden Anschaffungsrechnungen erbracht. Bei einer Position handelt es sich um ein Leihgerät eines externen Anbieters.\n*[Polizeiliche Anzeige:]*\nDer Diebstahl wurde angezeigt und wird unter [REDACTED_ID] geführt. Grundlage der Bewertung sind die Angebotspreise der jeweiligen Gerätehersteller zum Bewertungsstichtag. ...",
+          "example_answers_2": [
+            "A. Diebstahl von mehreren medizinischen Geräten",
+            "B. Diebstahl",
+            "C. Vor dem gemeldeten Anzeigedatum",
+            "D. Eigentumsnachweise durch Rechnungen; Position mit Leihgerät identifiziert; \nPolizeiliche Anzeige registriert (ID redacted)",
+            "E. Einzelpositionswerte in der Tabelle (siehe Gutachten)",
+            "F. Gesamtsumme (brutto) angegeben"
+          ]
+        }
+      ],
+      "summary": [
+        {
+          "example_text_1": "Kapitel 3: Sachverständige Ausführungen \nHinweis: Messergebnisse wurden verkürzt dargestellt, da keine Beeinträchtigung der Störempfindlichkeit erwartet wird.\nUntersuchungsgegenstand: Funksystemkomponenten eines Brandmeldesystems. ...",
+          "example_summary_1": "Gutachtenergebnisse verkürzt; Untersuchungsgegenstand: Funkkomponenten; Relevante Normen und Grenzwerte werden genannt."
+        },
+        {
+          "example_text_2": "Kapitel 3: Sachverständige Untersuchung \nNach Prüfung der Serviceberichte und telefonischer Erörterung der Fehleranalyse kann nicht ausgeschlossen werden, dass ein Überspannungsschaden auch weitere Komponenten betroffen hat. ...",
+          "example_summary_2": "Überspannungsschaden könnte weitere Komponenten betroffen haben; Wasserundichtigkeit auf Verschleiß zurückzuführen; betroffene Komponenten und Fehlerarten aufgelistet."
+        }
+      ]
+    },
+
+    "Schäden_und_Schadenereignisse": {
+      "questions": [
+        "A. Welche Komponenten wurden beschädigt?",
+        "B. Welche Akutschäden und/oder Verschleißschäden wurden festgestellt?",
+        "C. Welche Schadensereignisse lassen sich bestimmen?"
+      ],
+      "examples": [
+        {
+          "example_text_1": "Kapitel 6: Beschädigte Teile \nNachfolgend aufgeführte Teile wurden durch den Aufprall eines Objekts direkt beschädigt oder mussten montagebedingt erneuert werden.\n- Vorderes Gehäuse\n- Rückwärtiges Gehäuse\n- ...",
+          "example_answers_1": [
+            "A. Vorderes Gehäuse; Rückwärtiges Gehäuse; Dichtungen; Lampenhalterungen; Typenschild; Diverse Kleinteile",
+            "B. Akutschäden: Direkte Beschädigungen durch Aufprall",
+            "C. Aufprallereignis"
+          ]
+        },
+        {
+          "example_text_2": "Kapitel 7: Anzahl der Schadenereignisse / Obliegenheitsverletzung \nDie Untersuchungsergebnisse lassen neben gebrauchsbedingten Verschleißschäden zwei Akutschäden erkennen. Eine zeitliche bzw. räumliche Kausalität ist nicht erkennbar.",
+          "example_answers_2": [
+            "A. N.A.",
+            "B. Akutschäden: Zwei Akutschäden; Verschleißschäden: Gebrauchsbedingt",
+            "C. Zwei Schadensereignisse ohne erkennbare Kausalität"
+          ]
+        }
+      ],
+      "summary": [
+        {
+          "example_text_1": "Kapitel 6: Beschädigte Teile \nAuflistung der beschädigten oder zu erneuernden Teile (Elektronik, strukturelle Komponenten, Kanäle, Dichtungen).",
+          "example_summary_1": "Liste der betroffenen Teile; Gründe für Erneuerung: Beschädigung, montagebedingt, präventiv."
+        },
+        {
+          "example_text_2": "Kapitel 10: Anzahl der Schadenereignisse/Obliegenheitsverletzung \nAnalyse ergibt ein einzelnes Akutschadenereignis und Hinweise auf mögliche Obliegenheitsverletzungen aufgrund unzureichender Prüfungen.",
+          "example_summary_2": "Ein Akutschaden; Hinweise auf mögliche Obliegenheitsverletzung (z.B. fehlender Dichtigkeitstest); Entscheidung über Regulierung beim Versicherer."
+        }
+      ]
+    },
+
+    "Wiederinstandsetzungsmöglichkeiten": {
+      "questions": [
+        "A. Welche Möglichkeit der Wiederinstandsetzung (Reparatur/Austausch/Neuanschaffung) wird empfohlen und warum?",
+        "B. Welche Komponenten müssen repariert oder augetauscht werden?",
+        "C. Wie hoch sind die geschätzten Kosten für die Wiederinstandsetzung?"
+      ],
+      "examples": [
+        {
+          "example_text_1": "Kapitel 7: Reparaturmöglichkeiten und Gesamtschaden \nEine Einzelreparatur ist nach Herstellerangaben nicht möglich. Stattdessen wurde das System durch Reparaturaustauschkomponenten instandgesetzt.\nKostenaufstellung (Beispiel): Fahrtkosten, Montagezeiten, Austauschpreise, Zwischensumme, MwSt., Gesamtsumme.",
+          "example_answers_1": [
+            "A. Austausch durch Reparaturaustauschkomponenten, weil Einzelreparatur nicht möglich",
+            "B. Rechnersysteme und Austauschkomponenten",
+            "C. Gesamtkosten brutto angegeben"
+          ]
+        },
+        {
+          "example_text_2": "Kapitel 8: Alternativangebot \nAlternativangebote können für Betreiber relevant sein, sind aber für die Bewertung der versicherungspflichtigen Schäden nur dann relevant, wenn Kosten unterhalb der Reparaturkosten liegen.",
+          "example_answers_2": [
+            "A. Reparaturkosten liegen unterhalb der Austauschkosten; \nPrüfung des Austauschangebots empfohlen bei relevantem Verschleiß",
+            "B. N.A.",
+            "C. N.A."
+          ]
+        }
+      ],
+      "summary": [
+        {
+          "example_text_1": "Kapitel 6: Instandsetzungsmöglichkeiten und -kosten \nInstrumente mit komplexem Aufbau sind oft nicht einzeln reparierbar und werden ersetzt; Listen-Neupreise aufgeführt.",
+          "example_summary_1": "Komplexe Instrumente: keine Einzelreparatur möglich; Ersatz durch Neuinstrumente; Neupreise aufgeführt."
+        },
+        {
+          "example_text_2": "Kapitel 7: Möglichkeiten der Instandsetzung \nBeispielangebot eines Fachhändlers zum Austausch eines kompletten Systems mit Kostenaufschlüsselung.",
+          "example_summary_2": "System nicht reparabel; Austauschangebot mit Gesamtkosten (brutto) aufgeführt."
+        }
+      ]
+    },
+
+    "Finanzielle_Bewertung": {
+      "questions": [
+        "A. Welche Teilschäden bzw. Teilkosten werden aufgeführt?",
+        "B. Welche Gesamtschäden bzw. Gesamtkosten werden aufgeführt?",
+        "C. Welche Schäden bzw. Kosten wurden bereits reguliert?",
+        "D. Wie hoch ist der verbleibende Betrag nach Abzug der Regulierungskosten?"
+      ],
+      "examples": [
+        {
+          "example_text_1": "Kapitel 6: Kostenschätzung \nSzenario 1: Desinfektionskosten; Szenario 2: Austausch von Rohrleitungssegmenten; Herstellerangebot für komplette Ringleitung angegeben.",
+          "example_answers_1": [
+            "A. Desinfektionskosten 800-1.200 € brutto; Potenzielle Austauschkosten bei Bedarf",
+            "B. Szenarioabhängige Kosten, max. Herstellerangebot genannt",
+            "C. N.A.",
+            "D. N.A."
+          ]
+        },
+        {
+          "example_text_2": "Kapitel 5: Gesamtschaden \nGesamtschaden ergibt sich aus mehreren Teilrechnungen, regulierte Beträge und verbleibender Regulierungsbetrag sind angegeben.",
+          "example_answers_2": [
+            "A. Teilrechnungen aufgelistet",
+            "B. Gesamtschaden brutto angegeben",
+            "C. Bereits regulierter Betrag angegeben",
+            "D. Verbleibender Regulierungsbetrag angegeben"
+          ]
+        }
+      ],
+      "summary": [
+        {
+          "example_text_1": "Kapitel 5: Gesamtschaden \nGesamtschaden und bereits regulierte Beträge werden aufgeführt.",
+          "example_summary_1": "Gesamtschaden ergibt sich aus Teilrechnungen; regulierte und verbleibende Beträge aufgeführt."
+        },
+        {
+          "example_text_2": "Kapitel 6: Beschädigte Teile / Reparaturmöglichkeiten und Kosten \nBeispiel: Kameramodul irreparabel, Austausch notwendig; Reparaturkosten (netto) und Schadenssumme (brutto) angegeben.",
+          "example_summary_2": "Kameramodul irreparabel; Austausch notwendig; Reparaturkosten und Gesamtschadensumme angegeben."
+        }
+      ]
+    },
+
+    "Zeitwert": {
+      "questions": [
+        "A. Wie hoch ist der ermittelte Zeitwert des Geräts zum Schadenzeitpunkt?",
+        "B. Wie hoch war der Listen-Neupreis/Neupreis des Geräts zum Schadenzeitpunkt?",
+        "C. Wie alt war das Gerät zum Zeitpunkt des Schadens?",
+        "D. Was ist die angenommene mittlere Lebensdauer des Geräts für die Zeitwertberechnung?"
+      ],
+      "examples": [
+        {
+          "example_text_1": "Kapitel 6: Neupreis und Zeitwert \nDer Listen-Neupreis einer Ultraschallsonde lag zum Schadenzeitpunkt bei X € brutto. Da die Sonde erst wenige Wochen vor dem Schadeneintritt erneuert wurde, entspricht der Zeitwert dem Listen-Neupreis.",
+          "example_answers_1": [
+            "A. Zeitwert entspricht Listen-Neupreis",
+            "B. Listen-Neupreis angegeben",
+            "C. wenige Wochen",
+            "D. N.A."
+          ]
+        },
+        {
+          "example_text_2": "Kapitel 9: Neupreis und Zeitwertermittlung \nBeispiel: Zeitwertermittlung bei angenommener mittlerer Lebensdauer von 10 Jahren; Listenpreis und ermittelter Zeitwert angegeben.",
+          "example_answers_2": [
+            "A. Ermittelter Zeitwert angegeben",
+            "B. Listen-Neupreis angegeben",
+            "C. Gerätealter angegeben",
+            "D. Mittlere Lebensdauer angegeben"
+          ]
+        }
+      ],
+      "summary": [
+        {
+          "example_text_1": "Kapitel 9: Neupreis und Zeitwertermittlung \nBeispielrechnung für Zeitwert mit und ohne Berücksichtigung technischen Fortschritts.",
+          "example_summary_1": "Neupreis, angenommene Lebensdauer, Gerätealter und ermittelte Zeitwerte dargestellt."
+        },
+        {
+          "example_text_2": "Kapitel 7: Schadenhöhe bzw. Zeitwertermittlung \nZeitwert dient als Grundlage für Versicherungsleistungen; Vergleichsgerät und Werte angegeben.",
+          "example_summary_2": "Zeitwert als Grundlage für Versicherungsleistung; Vergleichswerte und Rechenmethode beschrieben."
+        }
+      ]
+    },
+
+    "Zusammenfassung_und_Bewertung": {
+      "questions": [
+        "A. Zu welchem Urteil oder zu welcher Schlussfolgerung über den Schaden und Schadenhergang wird gefolgert?",
+        "B. Wurde der Schaden bereits behoben und wenn ja, wie?",
+        "C. Welche versicherungsrelevanten Angaben werden gemacht?",
+        "D. Welche abschließenden Bemerkungen oder Empfehlungen werden genannt?"
+      ],
+      "examples": [
+        {
+          "example_text_1": "Kapitel 5: Zusammenfassung und Ergebnis \nDie technische Untersuchung ergab keinen Hinweis auf einen technischen Mangel, der ein bestimmtes Ereignis erklären würde. Eine elektrostatische Entladung wird als mögliche Ursache genannt. Empfehlungen zur Vermeidung elektrostatischer Entladungen angegeben.",
+          "example_answers_1": [
+            "A. Kein technischer Mangel festgestellt; mögliche elektrostatische Ursache genannt",
+            "B. N.A.",
+            "C. N.A.",
+            "D. Empfehlungen zur Vermeidung elektrostatischer Entladungen"
+          ]
+        },
+        {
+          "example_text_2": "Kapitel 8: Ergebnis \nDas schadhafte Gerät wurde zwischenzeitlich vom Hersteller instandgesetzt. Insofern ist zu vermuten, dass kein versicherungspflichtiges Schadenereignis vorlag.",
+          "example_answers_2": [
+            "A. Kein versicherungspflichtiges Schadenereignis vermutet",
+            "B. Gerät wurde kostenneutral durch Hersteller instandgesetzt",
+            "C. Keine Kosten für den Versicherungsfall",
+            "D. N.A."
+          ]
+        }
+      ],
+      "summary": [
+        {
+          "example_text_1": "Kapitel 7: Zusammenfassung \nKein technischer Defekt an der Insulinpumpe festgestellt; Veränderungen vermutlich nicht durch Defekt verursacht; Hinweise zu Parametereinstellungen und Schulungsbedarf.",
+          "example_summary_1": "Keine Anzeichen für technischen Defekt; Parametereinstellungen geändert; mögliche Ursachen: Sensorannahme, Bedienfehler, fehlende Schulung."
+        },
+        {
+          "example_text_2": "Kapitel 5: Zusammenfassung \nErmittlung der erforderlichen Versicherungssumme und Beschaffungskosten; Angaben zu Kosten und Differenzen.",
+          "example_summary_2": "Gesamt-Versicherungssumme und Beschaffungskosten aufgeführt; Preisdifferenzen beschrieben."
+        }
+      ]
+    },
+
+    "Beweisschluss": {
+      "questions": [
+        "A. Zu welchem Urteil oder zu welcher Schlussfolgerung wird gefolgert?",
+        "B. Was sind die Antworten auf die gestellten Fragen oder Behauptungen?",
+        "C. Welche abschließenden Bemerkungen oder Empfehlungen werden genannt?"
+      ],
+      "examples": [
+        {
+          "example_text_1": "Kapitel 6: Zu den Fragen \nDie Analyse der gespeicherten Daten lässt keine Zweifel an der ordnungsgemäßen Funktion erkennen. Zwei technische Punkte werden hervorgehoben, die das Ergebnis beeinflusst haben könnten (Einstellung Zielwert, Deaktivierung einer Warnfunktion im Auto-Modus).",
+          "example_answers_1": [
+            "A. Gerät funktionierte ordnungsgemäß; technische Einstellungen nicht an Lebensgewohnheiten angepasst",
+            "B. Zielwert nicht temporär erhöht; Auto-Modus deaktiviert frühzeitige Warnfunktion",
+            "C. Unklar, ob Schulungsmaßnahmen durchgeführt wurden"
+          ]
+        },
+        {
+          "example_text_2": "Kapitel 6: Zur Frage \nDie Untersuchungen ergaben, dass die ordnungsgemäße Funktion mit den eingestellten Parametern gegeben ist. Unterbrechung der Aufzeichnung ist auf Sensor/Transmitter-Probleme zurückzuführen.",
+          "example_answers_2": [
+            "A. Pumpe funktionierte ordnungsgemäß; Aufzeichnungsunterbrechung nicht pumpebedingt",
+            "B. Ursache: Transmitter/Glukosesensor oder patientenseitige Maßnahmen; \nZweifel an Messwerten in einem definierten Zeitfenster",
+            "C. N.A."
+          ]
+        }
+      ],
+      "summary": [
+        {
+          "example_text_1": "Kapitel 6: Zu den Fragen \nZusammenfassend: Geräte funktionierten; technische Auffälligkeiten und mögliche Auswirkungen erläutert; keine Informationen zu Schulungen.",
+          "example_summary_1": "Technische Funktion einwandfrei; Auffälligkeiten dokumentiert; Schulungsstatus unklar."
+        }
+      ]
+    },
+
+    "Referenzen": {
+      "questions": [
+        "A. Welche Medizinprodukte, Literatur, oder sonstige Unterlagen wurden verwendet?"
+      ],
+      "examples": [
+        {
+          "example_text_1": "Kapitel 3: Verwendete Medizinprodukte \n3.1\nProduktart : Anästhesiearbeitsplatz\nTyp : Primus\nHersteller : [REDACTED_MANUFACTURER]\nKonformität : Richtlinie 93/42/EWG, CE~0123~\n...\nVerwendetes Zubehör u.a.\nProduktart : Hydrophober Beatmungsfilter, patientennah\nTyp : Ultipor^TM^ 25\nREF : BB25\nHersteller : PALL Medical\nKonformität : CE~1282~",
+          "example_answers_1": [
+            "A. Verwendete Medizinprodukte: Anästhesiearbeitsplatz (Hersteller redacted); Zubehör und Filtertypen aufgelistet"
+          ]
+        },
+        {
+          "example_text_2": "Kapitel 3: Verwendete Unterlagen \nZur Gutachtenerstellung wurde die Gerichtsakte samt Anlagen und eine aktualisierte Inventarliste mit Anschaffungskosten und Rechnungsbelegen übergeben. Ergänzend wurden Fotos zu einzelnen Positionen ausgehändigt.",
+          "example_answers_2": [
+            "A. Verwendete Unterlagen: Gerichtsakte, Inventarliste mit Rechnungsbelegen, ergänzende Fotos"
+          ]
+        }
+      ],
+      "summary": [
+        {
+          "example_text_1": "Kapitel 4: Verwendete Literatur und Prüfgrundlagen der Begutachtung \n- Medical Device Regulation (MDR), Verordnung (EU) 2017/745.\n- DIN EN 60601-1 ...\n- TRGS 525 ...\n- Gerätespezifische Dokumentation: Gebrauchsanweisungen.",
+          "example_summary_1": "Regulatorische Grundlagen und relevante Normen sowie Gerätespezifische Dokumentation aufgeführt."
+        },
+        {
+          "example_text_2": "Kapitel 3: Verwendete Unterlagen \nGerichtsakte und Inventarliste wurden zur Verfügung gestellt; ergänzende Fotos wurden übergeben.",
+          "example_summary_2": "Sachverständiger erhielt Gerichtsakte und ergänzende Unterlagen; Inventarliste und Fotos übergeben."
+        }
+      ]
+    }
+  }
+}
